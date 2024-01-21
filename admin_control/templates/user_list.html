@@ -1,0 +1,132 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    th, tr { border: 1px solid gray;  border-collapse: collapse; padding: 5px;}
+    td { padding: 5px; border: 1px solid rgb(119, 113, 113);}.
+    .image-container {
+        width: 26px;
+        height: 20px;
+        overflow: hidden;
+        border-radius: 8px;
+     }
+     
+     .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+     }
+     
+        #td_imag img{
+    
+        width: 100px;
+        height: 120px;
+    }
+   
+</style>
+{% endblock  %}
+{% block title %} User List {% endblock  %}
+{% block body %}
+
+    {% if successfull %}
+    <div id="div_id" class="" >
+        <div class="alert alert-success" role="alert" id="successAlert">
+        <h4 class="text-center" style="color:blue;"> {{successfull}} </h4>
+        </div>
+    </div>
+    {% elif error_message %}
+    <div id="div_id">
+        <div class="alert alert-success" role="alert" id="successAlert">
+        <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+        </div>
+    </div>
+    {% endif %}
+
+  <h1 class="text-3xl font-bold mt-5 text-center">
+    Cafe Omor Faruk User List
+  </h1><br>
+  <form method="POST" >
+    {% csrf_token %}
+      <!-- search bar -->
+      <div class="max-w-screen-xl mx-auto h-14 p-3 md:p-0">
+        <div class="flex flex-row gap-2 items-center w-full md:justify-end justify-between">
+            <div class="max-w-screen-xl flex flex-row gap-2 items-center md:block">
+                <input placeholder="Search by userId/phone number" class="py-2 px-3 outline-none border rounded-xl" type="text" name="search_id" id="">
+                <button class="py-2 px-8 bg-indigo-500 hover:bg-indigo-300 hover:text-gray-50 rounded-md mx-auto" type="submit">Search</button>
+            </div>
+        </div>
+
+       
+     </div>
+    </form>
+    <!-- search bar -->
+    <div class="max-w-screen-xl mx-auto">
+        <table class="max-w-screen-xl mx-auto w-full mt-6 bg-slate-200">
+            <tr>
+                <th>Sl</th>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>User Phone Number</th>
+                <th>Amount</th>
+                <th>Photo</th>
+                <th>Payment History</th>
+                <th>Meal History</th>
+                <th>Extra Food</th>
+                <th>Action</th>
+            </tr>
+            {% for user, ucal in cofe_users.items %}
+            <tr>
+                <td> {{ forloop.counter }} </td>
+                <td> {{ user.user.username }} </td>
+                <td> {{ user.user.first_name }} {{user.user.last_name}} </td>
+                <td> {{ user.user.phone_number }} </td>
+                <td>{{ucal.final_calculation}}</td>
+
+                <td id="td_imag" class="flex justify-center border-none">
+                    {% if user.user.img %}
+                        <img src="{{user.user.img.url}}" class="flex items-center justify-center rounded-full" alt="#">
+					{% else %}
+                        <img id="selectedImage1" class="flex items-center justify-center rounded-full" alt="#">
+					{% endif %}
+  
+                </td>
+                
+                 
+                <td>
+                    <button onclick="location.href='{% url 'payment_statement' user.id %}'" class="bg-indigo-500 rounded-tl-full flex justify-center duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-4 py-2 m-2 transition-transform duration-200 ease-in-outshadow-xl shadow-green-400/75 transition-transform duration-200 ease-in-out hover:scale-[1.02] hover:bg-lime-600 duration-300">Payment</button>
+                </td>
+                <td>
+                    <button onclick="location.href='{% url 'personal_meal_report' user.id %}'" class="bg-indigo-500 rounded-tl-full flex justify-center duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-4 py-2 m-2 transition-transform duration-200 ease-in-outshadow-xl shadow-green-400/75 transition-transform duration-200 ease-in-out hover:scale-[1.02] hover:bg-lime-600 duration-300">Meal</button>
+                </td>
+                <td>
+                    <button onclick="location.href='{% url 'extar_food_history' user.id %}'" class="bg-indigo-500 rounded-tl-full flex justify-center duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-4 py-2 m-2 transition-transform duration-200 ease-in-outshadow-xl shadow-green-400/75 transition-transform duration-200 ease-in-out hover:scale-[1.02] hover:bg-lime-600 duration-300">Extra Food</button>
+                </td>
+                <td>
+                    <button onclick="location.href='{% url 'user_edit' user.id %}'" class="bg-indigo-500 rounded-tl-full flex justify-center hover:bg-lime-600 duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-4 py-2 m-2">Edit</button>
+                </td>
+            </tr>
+            {% endfor %}
+         
+           
+         
+          
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                 var alert = document.getElementById('successAlert');
+                 if (alert) {
+                     setTimeout(function() {
+                         alert.style.display = 'none';
+                         window.location.href = '{% url "user_list" %}'; 
+                     }, 3000); 
+                 }
+             }); 
+     
+         </script>
+
+{% endblock %}

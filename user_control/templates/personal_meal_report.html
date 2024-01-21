@@ -1,0 +1,202 @@
+
+{% extends 'base1.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    th, tr {   border: 1px solid rgb(110, 108, 108);  border-collapse: collapse;  padding: 5px;}
+    td {  padding: 5px;  border: 1px solid gray;}
+</style>
+{% endblock  %}
+{% block title %} Personal Meal Report {% endblock  %}
+{% block body %}
+
+{% if successfull %}
+<div id="div_id" class="max-w-screen-lg mx-auto">
+    <div class="block p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+    <h4 class="text-center text-indigo-800 font-bold text-4xl"> {{successfull}} </h4>
+    </div>
+</div>
+{% elif error_message %}
+<div id="div_id">
+    <div class="relative block w-full p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+    <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+    </div>
+</div>
+{% endif %}
+
+    <h1 class="mt-6 font-bold text-green-700 text-4xl text-center">Cafe Omor Faruk</h1>
+    <h1 class="font-bold text-xl text-center"> Personal Meal Report </h1><br>
+    <form method="POST" action="">
+        {% csrf_token %}
+    <!-- search bar -->
+     <div class="max-w-screen-xl mx-auto h-14 p-3 md:p-0">
+        <div class="flex flex-row gap-2 items-center w-full md:justify-end justify-between">
+             
+            <div class="flex flex-row gap-2 items-center">
+                <label for="fromDate">From :</label>
+                <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="fodate" id="fromDate">
+            </div>
+            
+            <div class="flex flex-row gap-2 items-center">
+                <label for="fromDate">To :</label>
+                <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="todate" id="fromDate">
+            </div>
+
+            <div class="flex flex-row gap-2 items-center">
+               
+                <button class="py-2 px-8 bg-indigo-500 hover:bg-indigo-300 hover:text-gray-50 rounded-md" type="submit">Search</button>
+            </div>
+      
+        </div>
+
+        {% comment %} <div class="mt-5 flex flex-row gap-2 items-center block md:hidden w-full">
+            <input class="py-2 px-3 outline-none border rounded-xl w-full" placeholder="Search here...." type="text" name="" id="">
+            <button class="py-2 px-8 bg-indigo-500 text-gray-100 hover:bg-indigo-300 hover:text-gray-50 rounded-md text-green-700" type="submit">Search</button>
+        </div> {% endcomment %}
+     </div>
+    <!-- search bar -->
+
+
+    <main class="max-w-screen-xl mx-auto md:mt-10 mt-20">
+        <table class="w-full h-14 ">
+            <tr>
+                <th rowspan="2">Date</th>
+                {% for mt in meal_tim %}
+                <th colspan="3" class="text-center">{{mt.meal_time}}</th>
+                {% endfor %}
+                <th rowspan="2">Total</th>
+            </tr>
+            <tr>
+                {% for mt in meal_tim %}
+                <td class="text-center">Name</td>
+                <td class="text-center">Quantity</td>
+                <td class="text-center">Amount</td>
+                {% endfor %}
+
+            </tr>
+            {% for date, mt_and_other in meals.items %}
+            <tr id="date_id{{forloop.counter0}}{{forloop.counter}}">
+                <td> {{ date }} </td>
+                {% for mt, other in mt_and_other.items %}
+                <td>
+                    {% for order_meal in other %}
+                        {{order_meal.meal.meal_name}}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for order_meal in other %}
+                        {{order_meal.quintity}}
+                    {% endfor %}
+                </td>
+                <td class="number{{other.id}}{{forloop.counter0}}" id="numbers{{forloop.counter0}}{{forloop.counter}}">
+                    <script>
+                      function amounats() {
+                          var tdContent = document.querySelector('#numbers{{forloop.parentloop.counter}}{{ forloop.counter }}{{forloop.counter0}}');
+
+                          let myQuintity = [];
+                          let myMeal_Amount = [];
+                          let totalMealAmmount = [];
+                          let sumTotalAmmount = 0
+
+                          '{% for order_meal in other %}'
+                          var quintity = '{{order_meal.quintity}}';
+                          var meal_amount = '{{ order_meal.meal.amount }}';
+                          myQuintity.push(quintity)
+                          myMeal_Amount.push(meal_amount)
+                          '{% endfor %}'
+                          myQuintity.forEach((q_value, q_index) => {
+                            myMeal_Amount.forEach((ammount_value, ammount_index) => {
+                              if (q_index === ammount_index) {
+                                const tatalMulti = q_value * ammount_value
+                                totalMealAmmount.push(tatalMulti)
+                              }
+                            })
+                          })
+                          totalMealAmmount.forEach((ammount, ind) => {
+                            sumTotalAmmount = sumTotalAmmount + ammount;
+                          })
+                          document.write(sumTotalAmmount)
+                      };
+                      amounats()
+                  </script>
+                  </td>
+               
+                
+                {% endfor %}
+                <td id="totol_id"> 
+            
+                    <script>
+                      function oneday_total() {
+                          var dateId = document.querySelector('#date_id{{ forloop.counter0 }}{{ forloop.counter }}');
+                          let sum = 0;
+                          if (dateId) {
+                              '{% for mt, other in mt_and_other.items %}'
+                                  var amountsIds = dateId.querySelectorAll('.number{{ other.id }}{{ forloop.counter0 }}');
+                               
+                                  amountsIds.forEach((value) => {
+                                   
+                                      sum += Number(value.innerText);
+                                  });
+                              '{% endfor %}'
+                  
+                              document.write(sum)
+                          }
+                      }
+                  
+                      oneday_total();
+                  </script>
+                  
+                  
+            
+                </td>
+            </tr>
+           
+            {% endfor %}
+     
+      
+            <tr>
+                <td colspan="10" align="center"> Total </td>
+             
+           
+                <td id="toto_show_id"> 
+      
+                  <script>
+      
+                  function summiton(){
+                    let toto_ids = document.querySelectorAll("#totol_id")
+                    let toto_show_ids = document.querySelector("#toto_show_id")
+                    let amount_of_sum = 0;
+                    for( let i = 0; i < toto_ids.length; i++){
+                      let val = Number(toto_ids[i].innerText)
+                      amount_of_sum += val
+                    }
+                    toto_show_ids.innerText = amount_of_sum
+                  }
+                  summiton()
+      
+                </script>
+      
+                </td>
+              </tr>
+      
+        </table>
+    </main>
+
+    <br>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                 var alert = document.getElementById('successAlert');
+                 if (alert) {
+                     setTimeout(function() {
+                         alert.style.display = 'none';
+                         {% comment %} window.location.href = '{% url "meal_feeding_entry" %}';  {% endcomment %}
+                     }, 2000); 
+                 }
+             }); 
+         </script>
+
+
+{% endblock %}

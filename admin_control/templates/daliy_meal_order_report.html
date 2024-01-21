@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% endblock  %}
+{% block title %} Admin Profile {% endblock  %}
+{% block body %}
+
+</head>
+<body>
+  <h1 class="text-3xl font-bold text-center mt-4">
+    Cafe Omor Faruk
+  </h1>
+
+
+      <form method="POST" Action="">
+        {% csrf_token %}
+
+
+    <div class="max-w-screen-xl mx-auto h-14 p-3 md:p-0">
+
+        <div class="flex flex-row gap-2 items-center w-full md:justify-end justify-between  max-w-screen-xl mx-auto">
+
+            <div class="flex flex-row gap-2 items-center">
+                <label for="fromDate">Date :</label>
+                <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="date" id="fromDate">
+            </div>
+
+            <div class="flex flex-row gap-2 items-center">
+                <button class="py-2 px-8 bg-indigo-500 hover:bg-indigo-300 hover:text-gray-50 rounded-md" type="submit">Search</button>
+            </div>
+        </div>
+
+     </div>
+    </form>
+
+  <div class="max-w-screen-xl mx-auto">
+    {% for mt, others in meals.items %}
+        <h1>{{mt.meal_time}}</h1>
+        <table class="max-w-screen-xl mx-auto w-full mt-6">
+            <tr class="border border-gray-500" >
+                <th class="border border-gray-500">Meal Name</th>
+                <th class="border border-gray-500">Total Meal</th>
+                <th class="border border-gray-500">Order Meal</th>
+                <th class="border border-gray-500">Provide Meal</th>
+                <th class="border border-gray-500">Blance Meal</th>
+            </tr>
+                {% for meal, other in others.items %}
+                    <tr class="text-center">
+                        <td class="border border-gray-500">{{meal.meal_name}}</td>
+                        <td class="border border-gray-500">{{meal.quintity}}</td>
+                        <td class="border border-gray-500">{{other.order_count}}</td>
+                        <td class="border border-gray-500">{{other.feeded_count}}</td>
+                        <td class="border border-gray-500" id="show_balance{{mt.id}}{{meal.id}}"
+                        >
+                            <script>
+                                document.getElementById('show_balance{{mt.id}}{{meal.id}}').innerText = {{meal.quintity}}-{{other.feeded_count}};
+                            </script>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+        </table>
+      {% endfor %}
+
+  </div>   
+ {% endblock %}

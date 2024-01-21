@@ -1,0 +1,120 @@
+
+{% extends 'base1.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    th, tr {  border: 1px solid gray;  border-collapse: collapse; padding: 5px;}
+    td {  padding: 5px;  border: 1px solid gray;}
+
+</style>
+{% endblock  %}
+{% block title %} Extra Food Statement {% endblock  %}
+{% block body %}
+
+    {% if successfull %}
+        <div id="div_id" class="" >
+            <div class="alert alert-success" role="alert" id="successAlert">
+            <h4 class="text-center" style="color:blue;"> {{successfull}} </h4>
+            </div>
+        </div>
+    {% elif error_message %}
+        <div id="div_id">
+            <div class="alert alert-success" role="alert" id="successAlert">
+            <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+            </div>
+        </div>
+    {% endif %}
+
+    <form method="POST" Action="">
+        {% csrf_token %}
+    <div class="mt-4">
+        <h1  class="mt-6 text-4xl font-bold text-green-700 text-center">Cafe Omor Faruk</h1><br>
+        <h1  class="font-bold text-xl text-center">Cafe Omor Faruk Extra Foods Report</h1><br>
+    </div>
+
+    <div class="max-w-screen-xl mx-auto h-14 p-3 md:p-0">
+        
+        <div class="flex flex-row gap-2 items-center w-full md:justify-end justify-between  max-w-screen-xl mx-auto">
+             
+            <div class="flex flex-row gap-2 items-center">
+                <label for="fromDate">From :</label>
+                <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="fodate" id="fromDate">
+            </div>
+            
+            <div class="flex flex-row gap-2 items-center">
+                <label for="fromDate">To :</label>
+                <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="todate" id="fromDate">
+            </div>
+
+            <div class="flex flex-row gap-2 items-center">
+                <button class="py-2 px-8 bg-indigo-500 hover:bg-indigo-300 hover:text-gray-50 rounded-md" type="submit">Search</button>
+            </div>
+        </div>
+
+     </div>
+    </form>
+
+    <div class="max-w-screen-lg">
+        <div class="flex flex-left gap-2 items-left w-full md:justify-end justify-between  max-w-screen-xl mx-auto">
+        
+            <div class="flex flex-row gap-2 items-center">
+                <label for="name">Name :</label>
+                <input readonly class="py-2 px-3 outline-none border-none rounded-xl"  value="{{pay_bok.last.c_user.user.first_name}} {{pay_bok.last.c_user.user.last_name}}" type="text" name="name" id="name">
+            </div>
+
+            <div class="flex flex-row gap-2 items-center">
+                <label for="name">User ID :</label>
+                <input readonly class="py-2 px-3 outline-none border-none rounded-xl" value="{{pay_bok.last.c_user.versity_id}}" type="text" name="number" id="number">
+            </div>
+          
+        </div>
+    </div>
+
+ 
+
+
+    <div class="scroll-mt-0">
+        <table class="max-w-screen-xl bg-gray-100 text-center w-full mx-auto">
+            <tr>
+                <th>SL</th>
+                <th> Date </th>
+                <th> Details </th>
+                <th>Amount</th>
+            </tr>
+            {% for food in extra_foods %}
+            <tr>
+                <td> {{ forloop.counter }} </td>
+                <td> {{food.date}} </td>
+                <td> {{food.detaild}} </td>
+                <td> {{food.amount}} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <td>
+        <div class="max-w-screen-xl mx-auto mt-4 justify-center items-center">
+            <button onclick="window.print()" class="bg-indigo-500 rounded-tl-full flex justify-center duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-6 py-4 m-2 transition-transform duration-200 ease-in-outshadow-xl shadow-green-400/75 transition-transform duration-200 ease-in-out hover:scale-[1.02] hover:bg-lime-600 duration-300 ">Print Statement</button>
+        </div>
+    </td>
+    
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+             var alert = document.getElementById('successAlert');
+             if (alert) {
+                 setTimeout(function() {
+                     alert.style.display = 'none';
+                     {% comment %} window.location.href = '{% url "payment_statement" %}'; {% endcomment %}
+                 }, 3000); 
+             }
+         }); 
+ 
+     </script>
+
+</div>
+
+{% endblock %}

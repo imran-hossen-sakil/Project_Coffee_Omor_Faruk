@@ -1,0 +1,144 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    th, tr { border: 1px solid gray;  border-collapse: collapse; padding: 5px;}
+    td { padding: 5px; border: 1px solid rgb(119, 113, 113);}
+    #td_imag img{
+    
+        width: 100px;
+        height: 120px;
+    }
+</style>
+{% endblock  %}
+{% block title %} User List {% endblock  %}
+{% block body %}
+
+    {% if successfull %}
+        <div id="div_id" class="" >
+            <div class="alert alert-success" role="alert" id="successAlert">
+            <h4 class="text-center" style="color:blue;"> {{successfull}} </h4>
+            </div>
+        </div>
+    {% elif error_message %}
+        <div id="div_id">
+            <div class="alert alert-success" role="alert" id="successAlert">
+            <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+            </div>
+        </div>
+    {% endif %}
+
+
+<section>
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700   
+            opacity-80">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8 bg-slate-10 ">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+                    Cafe Omor Faruk 
+                </h1>
+                <p class="text-xl leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+                    Edit Form
+                </p>
+                <form method="POST" enctype='multipart/form-data' class="space-y-4 md:space-y-6">
+                    {% csrf_token %}
+                    <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 ml-2 sm:col-span-4   
+                        md:mr-3">
+
+
+                        <input type="file" id="fileInput" name="user_photo" value="" class="hidden" x-ref="photo" x-on:change="
+                                            photoName = $refs.photo.files[0].name;
+                                            const reader = new FileReader();
+                                            reader.onload = (e) => {
+                                                photoPreview = e.target.result;
+                                            };
+                                            reader.readAsDataURL($refs.photo.files[0]);">
+
+
+                        <div class="text-center">
+
+                            <div class="mt-2" x-show="! photoPreview">
+                                <div id="td_imag" class="flex justify-center border-none">
+                                    {% if cofe_users.user.img %}
+                                        <img src="{{cofe_users.user.img.url}}" class="w-26 h-20 flex items-center justify-center rounded-2xl" alt="#">
+                                        {% comment %} <a href="{{user.img.url}}" class="w-26 h-20 flex items-center justify-center rounded-2xl" alt="#"> {{user.img.url}} </a> {% endcomment %}
+                                    {% else %}
+                                        <img id="selectedImage1" class="w-26 h-20 flex items-center justify-center rounded-2xl" alt="#">
+                                    {% endif %}
+                               
+                                </div>
+
+                            </div>
+
+                            <div class="mt-2" x-show="photoPreview" style="display: none;">
+                                <span class="block w-24 h-24 rounded-full m-auto shadow" x-bind:style="'background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url(\'' + photoPreview + '\');'" style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('null');">
+                                </span>
+                            </div>
+                            <button type="button" class="bg-indigo-500 rounded-tl-full flex justify-center duration-300 rounded-br-full  mx-auto text-white text-xs text-center self-center px-4 py-2 m-2 transition-transform duration-200 ease-in-outshadow-xl shadow-green-400/75 transition-transform duration-200 ease-in-out hover:scale-[1.02] hover:bg-lime-600 duration-300" x-on:click.prevent="$refs.photo.click()">
+                                Select New Photo
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Your First Name</label>
+                        <input type="text" name="first_name" value="{{cofe_users.user.first_name}}"  id="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg" placeholder="Enter Your First Name">
+                    </div>
+                    <div>
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Your Last Name</label>
+                        <input type="text" name="last_name" value="{{cofe_users.user.last_name}}" id="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg" placeholder="Enter Your Last Name">
+                    </div>
+                    <div>
+                        <label for="tel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+                        <input type="text" name="phone_number" value="{{cofe_users.user.phone_number}}"  id="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg" placeholder="Enter Your Phone Number">
+                    </div>                     
+                    <div>
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">User ID</label>
+                        <input type="text" name="" readonly value="{{cofe_users.user.username}}" id="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg">
+                    </div>
+                    <div>
+                        <label for="Number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">University ID</label>
+                        <input type="text" name="versity_id" value="{{cofe_users.versity_id}}"  id="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg" placeholder="Enter University ID">
+                    </div>
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                        <input type="email" name="email" value="{{cofe_users.user.email}}" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-br-lg" placeholder="Enter Your Email" required="">
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                          <input id="terms" aria-describedby="terms" name="inactive" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" >
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="terms" class="font-light text-dark-500 dark:text-gray-300 ">Inactive User</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full text-white bg-red-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save Information</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const selectedImage = document.getElementById('selectedImage');
+
+    fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+        selectedImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        selectedImage.src = '#';
+    }
+    });
+
+  </script>
+
+      {% endblock %}

@@ -1,0 +1,95 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock  %}
+{% block title %} Daily Meal Entry {% endblock  %}
+{% block body %}
+
+
+  {% if successfull %}
+    <div id="div_id" class="max-w-screen-lg mx-auto">
+        <div class="block p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+        <h4 class="text-center text-indigo-800 font-bold text-4xl"> {{successfull}} </h4>
+        </div>
+    </div>
+    {% elif error_message %}
+    <div id="div_id">
+        <div class="relative block w-full p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+        <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+        </div>
+    </div>
+  {% endif %}
+
+<form method="POST">
+  {% csrf_token %}
+  <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4 text-center mt-6">Cafe Omor Faruk</h1>
+  <h3 class="text-center text-4xl font-semibold">Meal Entry</h3><br>
+  <div class="max-w-screen-xl mx-auto">
+      <table class="max-w-screen-xl mx-auto w-full mt-6">
+          <tr>
+          <th class="border p-2">Meal Time</th>
+          <th class="border p-2">Meal Name</th>
+          <th class="border p-2">Meal Quantity</th>
+          <th class="border p-2">Each Meal Price</th>
+          <th class="border p-2">Optional</th>
+          </tr>
+            {% for coun in counter %}
+                <tr>
+              <td class="border">
+                  <select class="w-full mt-4 p-2 rounded-md border" name="meal_times{{forloop.counter}}" id="">
+                      {% for meal in meal_time %}
+                      <option value="{{meal.id}}"> {{meal.meal_time}} </option>
+                      {% endfor %}
+                  </select>
+              </td>
+              <td class="border">
+                  <div class="mb-4 mt-8">
+                      <input type="text" name="meal_name{{forloop.counter}}" id="User_ID" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" >
+                  </div>
+              </td>
+              <td class="border">
+                  <div class="mb-4 mt-8">
+                      <input type="number" name="meal_quantity{{forloop.counter}}" id="User_ID" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" >
+                  </div>
+              </td>
+              <td class="border">
+                  <div class="mb-4 mt-8">
+                      <input type="number" name="meal_price{{forloop.counter}}" id="User_ID" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" >
+                  </div>
+              </td>
+              <td class="border flex flex p-10 justify-center">
+                  <input type="checkbox" name="optionals{{forloop.counter}}" id="">
+              </td>
+
+          </tr>
+            {% endfor %}
+          <tr>
+
+              <td colspan="5">
+                  <div class="mt-4 flex justify-center">
+                      <button type="submit" class="w-full bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-lime-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-900 duration-300">Save</button>
+                      </div>
+              </td>
+
+          </tr>
+      </table>
+  </div>
+</form>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+           var alert = document.getElementById('successAlert');
+           if (alert) {
+               setTimeout(function() {
+                   alert.style.display = 'none';
+                   window.location.href = '{% url "daily_meal_entry" %}';
+               }, 2000);
+           }
+       });
+   </script>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    th, tr { border: 1px solid rgb(160, 153, 153);  border-collapse: collapse;  padding: 5px;  }
+    td { padding: 5px;  border: 1px solid gray;}
+</style>
+{% endblock  %}
+{% block title %} Meal Feeding Entry {% endblock  %}
+{% block body %}
+
+{% if successfull %}
+<div id="div_id" class="max-w-screen-lg mx-auto">
+    <div class="block p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+    <h4 class="text-center text-indigo-800 font-bold text-4xl"> {{successfull}} </h4>
+    </div>
+</div>
+{% elif error_message %}
+<div id="div_id">
+    <div class="relative block w-full p-4 mb-4 text-base leading-5 text-white rounded-lg opacity-100 font-regular" role="alert" id="successAlert">
+    <h4 class="text-center" style="color:red; font-size:30px"> {{error_message}} </h4>
+    </div>
+</div>
+{% endif %}
+
+        <!-- search bar -->
+        <form method="POST" Action="" >
+            {% csrf_token %}
+        <div class="max-w-screen-xl mx-auto h-14 p-3 md:p-0">
+            <div class="flex flex-row gap-2 items-center w-full md:justify-end justify-between">  
+                <div class="flex flex-row gap-2 items-center">
+                    <label for="fodate"></label>
+                    <input class="py-2 px-3 outline-none border rounded-xl" type="date" name="fodate" id="fromDate">
+                </div>
+    
+                <div class="flex flex-row gap-2 items-center">
+                    <input placeholder="Search here..." class="py-2 px-3 outline-none border rounded-xl" type="text" name="search_id" id="">
+                    <button class="py-2 px-8 bg-indigo-500 hover:bg-indigo-300 hover:text-gray-50 rounded-md" type="submit">Search</button>
+                </div>
+            </div>
+    
+            {% comment %} <div class="mt-4 flex flex-row gap-2 items-center block md:hidden w-full">
+                <input class="py-2 px-3 outline-none border rounded-xl w-full" placeholder="Search here...." type="text" name="" id="">
+                <button class="py-2 px-8 bg-indigo-500 text-gray-100 hover:bg-indigo-300 hover:text-gray-50 rounded-md text-green-700" type="submit">Search</button>
+            </div> {% endcomment %}
+         </div>
+        </form>
+        <!-- search bar -->
+        
+  <div>
+    <h1 class="mt-16 text-3xl font-bold text-green-700 text-center text-4xl">Cafe Omor Faruk</h1>
+    <p class="font-bold text-xl text-center">  </p>
+    <h1 class="font-bold text-xl text-center">Date:{{search_date}}</h1><br>
+  </div>
+
+  <form method="POST">
+
+  <div class="max-w-screen-xl mx-auto">
+    <table class="w-full bg-slate-200">
+        <tr>
+            <th>SL</th>
+            <th>Name Of User</th>
+            <th>User ID / Phone Number</th>
+        {% for mt in meal_tim  %}
+            <th> {{mt.meal_time}} </th>
+            <th>Qn</th>
+            <th>Price</th>
+            <th>Amount</th>
+            <th> Receive </th>
+        {% endfor %}
+           
+           
+        </tr>
+        {% for coffe_user, meal_time_with_data in coffe_wise_meal.items %}
+        <tr>
+            <td> {{forloop.counter}} </td>
+            <td> {{coffe_user.user.first_name}} {{coffe_user.user.last_name}} </td>
+            <td> {{coffe_user.user.username}} </td>
+            {% for mt, meal in meal_time_with_data.items %}
+            <td>
+                {% for m in meal %}
+                    {{m.meal.meal_name}} <br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for m in meal %}
+                    {{m.quintity}}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for m in meal %}
+                    {{m.meal.amount}}<br>
+                {% endfor %}
+            </td>
+            <td  id="show{{coffe_user.id}}{{mt.id}}">
+                <div class="form-switch">
+                    <label class="form-check-label" id="button{{coffe_user.id}}{{mt.id}}"></label>
+                </div>
+
+            </td>
+            <td>
+             
+                {% if not meal.last.received %}
+                <input class="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/7%),_0_2px_2px_0_rgb(0_0_0/4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px-2px_rgba(0,0,0,0.2),0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]" type="checkbox" role="switch" d="flexSwitchCheckDefault" onchange="meal_received('{{coffe_user.id}}','{{mt.id}}')" >
+                {% else %}
+                <input class="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/7%),_0_2px_2px_0_rgb(0_0_0/4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px-2px_rgba(0,0,0,0.2),0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]" disabled checked type="checkbox" role="switch" >
+                {% endif %}
+
+            </td>
+          
+            {% comment %} <td >
+                    {% if not meal.last.received %}
+                        <input class="form-check-input" onchange="meal_received({{meal.id}}" type="checkbox" role="switch" >
+                    {% else %}
+                        <input class="form-check-input" disabled checked type="checkbox" role="switch" >
+                    {% endif %}
+            </td> {% endcomment %}
+            
+
+            
+            <div style="display: none;">
+                <script>
+
+                function meal_received(c_user, mt_id){
+                   
+                   $.ajax({
+                        type:'POST',
+                        url:"{% url 'coffe_gave_to_student' %}",
+                        data:{
+                        
+                            coffe_user:c_user,
+                            coffe_meal_time:mt_id,
+                            
+                            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                        },
+                        success:function(response){
+                        },
+                        error:function(response){
+                        }
+                    })
+
+                }
+
+                function summation(show_id, button_id){
+                    const btn = document.getElementById(button_id);
+                        let total=0;
+                        "{% for m in meal %}"
+                            total+={{m.meal.amount}}*{{m.quintity}};
+                            if ('{{m.received}}'=='True'){
+                                btn.disabled = true;
+                                }
+                            else{
+                                btn.disabled = false;
+                                }
+                        "{% endfor %}"
+                        document.getElementById(show_id).innerText=total;
+                        document.getElementById(show_id).append(btn);
+                        }
+                summation("show{{coffe_user.id}}{{mt.id}}", "button{{coffe_user.id}}{{mt.id}}")
+                </script>
+
+
+            </div>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+           
+    </table>
+</form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+             var alert = document.getElementById('successAlert');
+             if (alert) {
+                 setTimeout(function() {
+                     alert.style.display = 'none';
+                     window.location.href = '{% url "meal_feeding_entry" %}'; 
+                 }, 2000); 
+             }
+         }); 
+     </script>
+
+
+{% endblock %}
