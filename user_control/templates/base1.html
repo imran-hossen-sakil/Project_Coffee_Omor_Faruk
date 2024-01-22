@@ -15,7 +15,7 @@
     {% block title %}{% endblock  %}
   </title>
     {% endblock  %}
-<body>
+<body class="relative">
  
     
     <div class="w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
@@ -59,12 +59,19 @@
         </nav>
       </div>
   </div>
-  <div>
 
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
       {% block body %}{% endblock  %}
+      <!-- Footer Section State -->
 
+        <footer class="absolute right-5 bottom-12">
+
+          <p class="">Develope By<a class="text-violet-950 font-bold italic" href="https://www.mangrove.it/"> Mangrove IT</a></p>
+
+        </footer>
+
+      <!-- Footer Section End -->
     </body>
   </html>
 

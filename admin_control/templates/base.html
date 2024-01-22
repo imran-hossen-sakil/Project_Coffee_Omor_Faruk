@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-
+    <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+    <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   </head>
@@ -16,7 +17,7 @@
     {% block head %}
     {% endblock  %}
 
-<body>
+<body class="relative">
     <div class="w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
         <div x-data="{ open: false }" class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
           <div class="p-4 flex flex-row items-center justify-between">
@@ -121,6 +122,17 @@
 
       {% block body %}{% endblock  %}
 
+      <!-- Image section st -->
+         
+      <!-- Image section st -->
+
+      <!-- Footer Section State -->
+        <footer class="absolute right-5 bottom-5">
+
+            <p class="">Develope By<a class="text-violet-950 font-bold italic" href="https://www.mangrove.it/"> Mangrove IT</a></p>
+
+        </footer>
+      <!-- Footer Section End -->
     </body>
   </html>
 
